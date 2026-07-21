@@ -409,6 +409,7 @@ def main():
     button_image    = load_png_image("UI/buttonLarge.png",  BUTTON, (300, 58))
     get_ready_image = load_png_image("UI/textGetReady.png", ORANGE, (300, 54))
     tap_image       = load_png_image("UI/tap.png",          WHITE,  (60,  60))
+    tap_tick_image  = load_png_image("UI/tapTick.png",      WHITE,  (60,  60))
     ui_bg_image     = load_png_image("UI/UIbg.png",         PANEL,  (660, 360))
 
     # collectibles pool size to 40,40
@@ -620,6 +621,15 @@ def main():
                 "timer":     0,
                 "max_timer": random.randint(320, 480),
                 "dx":        random.uniform(-1.8, -0.4),   
+            })
+        if tap_tick_image:
+            puffs.append({
+                "surf":      pygame.transform.smoothscale(tap_tick_image, (28, 28)),
+                "x":         float(tail_x - 14),
+                "y":         float(tail_y - 14),
+                "timer":     0,
+                "max_timer": 320,
+                "dx":        random.uniform(-1.2, -0.3),
             })
 
     def imouse(event): return to_internal(event.pos, get_viewport(window.get_size()))
@@ -1012,9 +1022,23 @@ def main():
             canvas.blit(hint, (MID - hint.get_width()//2, SCROLL_BOTTOM + 8))
 
         elif state == STATE_GET_READY:
-            if get_ready_image: canvas.blit(get_ready_image,(WIDTH//2-get_ready_image.get_width()//2,HEIGHT//3-50))
-            if tap_image and (pygame.time.get_ticks()//500)%2==0:
-                canvas.blit(tap_image,(WIDTH//2-tap_image.get_width()//2,HEIGHT//2+30))
+            if get_ready_image:
+                canvas.blit(get_ready_image, (WIDTH // 2 - get_ready_image.get_width() // 2, HEIGHT // 3 - 50))
+            
+            ticks = pygame.time.get_ticks()
+            pulse = math.sin(ticks * 0.008) * 6
+            bounce_y = HEIGHT // 2 + 30 + pulse
+            
+            # Bottom UI prompt: tap and tapTick pulsing animation
+            tap_prompt_frames = [tap_image, tap_tick_image]
+            tap_prompt_frames = [f for f in tap_prompt_frames if f is not None]
+            if tap_prompt_frames:
+                frame_idx = (ticks // 400) % len(tap_prompt_frames)
+                curr_img  = tap_prompt_frames[frame_idx]
+                sz_w = int(55 + pulse)
+                sz_h = int(55 + pulse)
+                scaled_tap = pygame.transform.smoothscale(curr_img, (max(10, sz_w), max(10, sz_h)))
+                canvas.blit(scaled_tap, (WIDTH // 2 - scaled_tap.get_width() // 2, int(bounce_y - scaled_tap.get_height() // 2)))
 
         elif state == STATE_PLAYING:
             draw_score(canvas, score, WIDTH//2, 50, number_images)
