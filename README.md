@@ -1,15 +1,10 @@
-# AWS Fireplane ✈️☁️
+# AWS Fireplane 
 
-An exciting 2D arcade platformer featuring AWS Cloud Club branding, AWS service typing challenges, multiplier slot wheel bonuses, and dynamic difficulty scaling!
 
----
-
-## 🚀 Quick Start
-
-### Option 1: Double-Click Launcher (Windows)
+### Double-Click Launcher (Windows)
 Double-click `run.bat` to automatically install dependencies and launch the game.
 
-### Option 2: Command Line
+### Command Line
 
 1. **Clone the repository:**
    ```bash
