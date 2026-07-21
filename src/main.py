@@ -700,7 +700,7 @@ def main():
                 score_multiplier = wheel_options[final_idx]
                 multiplier_timer = 5000
                 invulnerable_timer = 1500
-                score += int(10 * score_multiplier)   # immediate bonus burst
+                score += int(10 * score_multiplier)   
                 quiz_feedback_text = f"{score_multiplier}x! +{int(10 * score_multiplier)} pts!"
                 quiz_feedback_timer = 2000
                 state = STATE_PLAYING
@@ -732,7 +732,7 @@ def main():
 
         elif state == STATE_PLAYING:
             time_survived_ms += dt
-            current_speed += 0.035 * (dt / 1000.0)
+            current_speed += 0.075 * (dt / 1000.0)
             sync_speed()
             if invulnerable_timer  > 0: invulnerable_timer  = max(0, invulnerable_timer  - dt)
             if quiz_feedback_timer > 0: quiz_feedback_timer = max(0, quiz_feedback_timer - dt)
@@ -960,10 +960,9 @@ def main():
                     name_s = fonts["body"].render(name, True, NAME_COL)
                     role_s = fonts["small"].render(role.upper(), True, ROLE_COL)
                     ey = cy + ENTRY_H // 2
-                    # Name right-aligned to centre
+                    
                     content.blit(name_s, (NAME_RIGHT - name_s.get_width(),
                                           ey - name_s.get_height() // 2))
-                    # Role left-aligned from centre
                     content.blit(role_s, (ROLE_LEFT,
                                           ey - role_s.get_height() // 2))
                     cy += ENTRY_H
